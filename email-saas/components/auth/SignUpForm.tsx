@@ -78,6 +78,13 @@ export function SignUpForm() {
     if (result?.error) {
       setError(result.error);
       setLoading(false);
+
+      // If user already exists, clear form except email for convenience
+      if ((result as any).userExists) {
+        setPassword("");
+        setConfirmPassword("");
+        setAcceptedTerms(false);
+      }
     } else {
       setSuccess(true);
       setLoading(false);

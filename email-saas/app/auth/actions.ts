@@ -15,6 +15,10 @@ export async function signUp(formData: FormData) {
   const { error } = await supabase.auth.signUp(data)
 
   if (error) {
+    // Check if error is about user already registered
+    if (error.message.includes('already registered') || error.message.includes('User already registered')) {
+      return { error: 'An account with this email already exists. Please try logging in instead.', userExists: true }
+    }
     return { error: error.message }
   }
 
@@ -52,11 +56,14 @@ export async function resetPassword(formData: FormData) {
 
   const email = formData.get('email') as string
 
+  // Always send success for security (don't reveal if email exists)
+  // But the email will only be sent if the account exists
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`,
   })
 
-  if (error) {
+  // Don't reveal if email doesn't exist for security reasons
+  if (error && !error.message.includes('not found')) {
     return { error: error.message }
   }
 
