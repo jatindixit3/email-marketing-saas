@@ -1,7 +1,8 @@
 {
-  "name": "email-saas",
+  "name": "sendbear",
   "version": "0.1.0",
   "private": true,
+  "description": "Email marketing that doesn't bite",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

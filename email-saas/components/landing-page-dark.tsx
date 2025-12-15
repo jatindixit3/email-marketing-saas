@@ -50,7 +50,7 @@ export default function LandingPageDark() {
             <Link href="/" className="flex items-center">
               <Mail className="h-8 w-8 text-teal-400" />
               <span className="ml-2 text-xl font-bold text-white">
-                YourName
+                SendBear
               </span>
             </Link>
             <div className="hidden md:flex items-center space-x-8">
@@ -81,9 +81,9 @@ export default function LandingPageDark() {
         <div className="relative z-10">
           {/* Hero Section with HeroGeometric */}
           <HeroGeometric
-            badge="Email Marketing SaaS"
-            title1="Email marketing for $9/month"
-            title2="instead of $300"
+            badge="10x Cheaper Than Mailchimp"
+            title1="Email Marketing That"
+            title2="Doesn't Bite"
           />
 
           {/* Testimonials Section */}
@@ -94,15 +94,15 @@ export default function LandingPageDark() {
             <div className="grid md:grid-cols-3 gap-6 mb-16">
               {[
                 {
-                  text: "We saved thousands using YourName.",
+                  text: "We saved thousands switching to SendBear. Best decision ever.",
                   name: "Alex K., Founder",
                 },
                 {
-                  text: "We saved thousands using YourName.",
-                  name: "Alex K., Founder",
+                  text: "SendBear is incredibly simple yet powerful. Love it!",
+                  name: "Sarah M., Marketing Director",
                 },
                 {
-                  text: "We saved thousands using YourName.",
+                  text: "Finally, email marketing that doesn't break the bank.",
                   name: "Masa K., Founder",
                 },
               ].map((testimonial, index) => (
@@ -115,14 +115,14 @@ export default function LandingPageDark() {
 
             {/* Comparison Cards - Liquid Glass */}
             <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-              {/* YourName Card */}
+              {/* SendBear Card */}
               <div className="relative rounded-2xl p-[1px] bg-gradient-to-br from-teal-400 via-teal-500 to-purple-500 shadow-2xl shadow-teal-500/50">
                 <div className="h-full rounded-2xl p-6 bg-gradient-to-br from-teal-500/10 via-black to-purple-500/10 backdrop-blur-xl relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50"></div>
 
                   <div className="relative z-10">
                     <div className="text-center mb-6">
-                      <h3 className="text-xl font-bold text-teal-400 mb-2">YourName</h3>
+                      <h3 className="text-xl font-bold text-teal-400 mb-2">SendBear</h3>
                       <div className="text-3xl font-bold text-white">$9/mo</div>
                     </div>
                     <ul className="space-y-3">
@@ -440,7 +440,7 @@ export default function LandingPageDark() {
               Ready to save thousands on email marketing?
             </h2>
             <p className="text-xl mb-8 text-gray-300">
-              Join 50,000+ businesses who switched and never looked back
+              Join 500+ businesses who switched and never looked back
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/auth/signup">
@@ -502,7 +502,7 @@ export default function LandingPageDark() {
 
             <div className="text-center border-t border-white/10 pt-8">
               <p className="text-sm text-gray-500">
-                © 2024 YourName Inc.
+                © 2025 SendBear. All rights reserved.
               </p>
             </div>
           </div>

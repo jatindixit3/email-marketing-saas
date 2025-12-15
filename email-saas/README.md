@@ -1,80 +1,130 @@
-# Email Marketing SaaS Landing Page
+# SendBear
 
-A modern, conversion-optimized landing page for an email marketing SaaS that competes with Mailchimp on price.
+Email marketing that doesn't bite.
+
+## About
+
+SendBear is an affordable email marketing platform for small businesses. Send professional campaigns for $9/month instead of $300.
 
 ## Features
 
-- **Hero Section** with clear value proposition: "Email marketing for $9/month instead of $300"
-- **Social Proof** section with customer testimonials
-- **Feature Comparison Table** comparing features with Mailchimp
-- **Pricing Tiers** (Free, $9, $29, $49, $99) with detailed feature lists
-- **FAQ Section** addressing common migration concerns
-- **Footer** with trust badges and compliance information
+- Simple drag-and-drop email builder
+- Contact management & list segmentation
+- Campaign scheduling & automation
+- Real-time analytics & reporting
+- Template library
+- CSV import/export
+- AWS SES integration for reliable email delivery
+- Rate limiting & queue management with BullMQ
+- GDPR compliance
 
 ## Tech Stack
 
 - **Next.js 14** - React framework with App Router
 - **TypeScript** - Type-safe development
 - **Tailwind CSS** - Utility-first styling
+- **Supabase** - Authentication & database
+- **AWS SES** - Email sending service
+- **BullMQ** - Job queue for email processing
+- **Upstash Redis** - Rate limiting
 - **shadcn/ui** - High-quality UI components
-- **Lucide React** - Beautiful icons
 
 ## Getting Started
 
-1. Install dependencies:
+1. Clone the repository:
+
+```bash
+git clone https://github.com/jatindixit3/email-marketing-saas.git
+cd email-marketing-saas
+```
+
+2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Run the development server:
+3. Set up environment variables:
+
+Copy `.env.example` to `.env` and fill in your credentials:
+
+```bash
+cp .env.example .env
+```
+
+Required environment variables:
+- `NEXT_PUBLIC_SUPABASE_URL` - Your Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+- `AWS_ACCESS_KEY_ID` - AWS access key for SES
+- `AWS_SECRET_ACCESS_KEY` - AWS secret key for SES
+- `AWS_SES_FROM_EMAIL` - Verified sender email in AWS SES
+- `UPSTASH_REDIS_REST_URL` - Upstash Redis URL for rate limiting
+- `UPSTASH_REDIS_REST_TOKEN` - Upstash Redis token
+
+4. Run the development server:
 
 ```bash
 npm run dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Project Structure
 
 ```
 email-saas/
-├── app/
-│   ├── layout.tsx          # Root layout with metadata
-│   ├── page.tsx            # Home page
-│   └── globals.css         # Global styles
-├── components/
-│   ├── ui/                 # Reusable UI components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   └── badge.tsx
-│   └── landing-page.tsx    # Main landing page component
-└── lib/
-    └── utils.ts            # Utility functions
+├── app/                    # Next.js app router pages
+│   ├── auth/              # Authentication pages
+│   ├── dashboard/         # Dashboard pages
+│   ├── pricing/           # Pricing page
+│   └── layout.tsx         # Root layout
+├── components/            # React components
+│   ├── ui/               # Reusable UI components
+│   ├── dashboard/        # Dashboard components
+│   └── landing-page-dark.tsx
+├── lib/                   # Utility functions
+│   ├── constants/        # Brand constants
+│   ├── queue/            # Email queue worker
+│   └── scheduler/        # Cron jobs
+└── database/             # Database migrations
 ```
 
-## Customization
+## Deployment
 
-Replace `[YOUR_NAME]` throughout the codebase with your actual SaaS name.
+### Prerequisites
 
-## Design Principles
+1. Set up AWS SES and verify your sending domain
+2. Create a Supabase project and set up authentication
+3. Set up Upstash Redis for rate limiting
+4. Configure environment variables in your deployment platform
 
-- **Clean & Minimal** - Focus on content and conversion
-- **Fast Loading** - Optimized components and minimal dependencies
-- **Mobile-First** - Fully responsive design
-- **Conversion-Optimized** - Strategic CTAs and social proof placement
-
-## Build for Production
+### Deploy to Vercel
 
 ```bash
 npm run build
-npm start
+vercel deploy
 ```
 
-## Deploy
+### Run Email Worker
 
-Deploy easily on Vercel, Netlify, or any platform that supports Next.js.
+For processing email queues in production:
+
+```bash
+npm run worker
+```
+
+### Run Scheduler
+
+For scheduled campaigns:
+
+```bash
+npm run scheduler:prod
+```
 
 ## License
 
 MIT
+
+## Support
+
+For support, email support@sendbear.co or open an issue on GitHub.

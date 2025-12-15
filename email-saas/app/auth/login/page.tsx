@@ -17,11 +17,11 @@ export default function LoginPage() {
             {/* Logo */}
             <Link href="/" className="flex items-center mb-8">
               <Mail className="h-10 w-10 text-teal-400" />
-              <span className="ml-2 text-2xl font-bold text-white">YourName</span>
+              <span className="ml-2 text-2xl font-bold text-white">SendBear</span>
             </Link>
 
             <h1 className="text-4xl font-bold text-white mb-4">
-              Sign in to Your Account
+              Log in to SendBear
             </h1>
             <p className="text-gray-400 text-lg mb-8">
               Access your email marketing dashboard and manage your campaigns.
@@ -79,7 +79,7 @@ export default function LoginPage() {
             {/* Mobile logo */}
             <Link href="/" className="flex lg:hidden items-center justify-center mb-8">
               <Mail className="h-10 w-10 text-teal-400" />
-              <span className="ml-2 text-2xl font-bold text-white">YourName</span>
+              <span className="ml-2 text-2xl font-bold text-white">SendBear</span>
             </Link>
 
             {/* Card */}

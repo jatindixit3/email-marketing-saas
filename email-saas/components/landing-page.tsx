@@ -99,15 +99,15 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-6 mb-16">
             {[
               {
-                text: "We saved thousands using YourName.",
+                text: "We saved thousands switching to SendBear. Best decision ever.",
                 name: "Alex K., Founder",
               },
               {
-                text: "We saved thousands using YourName.",
-                name: "Alex K., Founder",
+                text: "SendBear is incredibly simple yet powerful. Love it!",
+                name: "Sarah M., Marketing Director",
               },
               {
-                text: "We saved thousands using YourName.",
+                text: "Finally, email marketing that doesn't break the bank.",
                 name: "Masa K., Founder",
               },
             ].map((testimonial, index) => (
@@ -122,7 +122,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <div className="bg-teal-50 border-2 border-teal-600 rounded-xl p-6">
               <div className="text-center mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">YourName</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">SendBear</h3>
                 <div className="text-3xl font-bold text-gray-900">$9/mo</div>
               </div>
               <ul className="space-y-3">
@@ -464,7 +464,7 @@ export default function LandingPage() {
 
           <div className="text-center border-t border-gray-800 pt-8">
             <p className="text-sm text-gray-500">
-              © 2024 YourName Inc.
+              © 2025 SendBear. All rights reserved.
             </p>
             <div className="flex justify-center gap-6 mt-4">
               <a href="https://twitter.com/yourcompany" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">

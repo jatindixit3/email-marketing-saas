@@ -17,11 +17,11 @@ export default function SignUpPage() {
             {/* Logo */}
             <Link href="/" className="flex items-center mb-8">
               <Mail className="h-10 w-10 text-teal-400" />
-              <span className="ml-2 text-2xl font-bold text-white">YourName</span>
+              <span className="ml-2 text-2xl font-bold text-white">SendBear</span>
             </Link>
 
             <h1 className="text-4xl font-bold text-white mb-4">
-              Create Your Free Account
+              Start Your Free SendBear Account
             </h1>
             <p className="text-gray-400 text-lg mb-8">
               Start your email marketing journey in just 60 seconds. No credit card required.
@@ -95,7 +95,7 @@ export default function SignUpPage() {
             {/* Mobile logo */}
             <Link href="/" className="flex lg:hidden items-center justify-center mb-8">
               <Mail className="h-10 w-10 text-teal-400" />
-              <span className="ml-2 text-2xl font-bold text-white">YourName</span>
+              <span className="ml-2 text-2xl font-bold text-white">SendBear</span>
             </Link>
 
             {/* Card */}

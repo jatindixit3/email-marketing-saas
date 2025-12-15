@@ -73,7 +73,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex items-center">
             <Mail className="h-8 w-8 text-teal-600" />
             <span className="ml-2 text-xl font-bold text-white">
-              YourName
+              SendBear
             </span>
           </div>
           <button

@@ -207,7 +207,7 @@ export default function PricingPage() {
             <Link href="/" className="flex items-center">
               <Mail className="h-8 w-8 text-teal-400" />
               <span className="ml-2 text-xl font-bold text-white">
-                YourName
+                SendBear
               </span>
             </Link>
             <div className="hidden md:flex items-center space-x-8">

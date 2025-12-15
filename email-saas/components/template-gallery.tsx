@@ -235,7 +235,7 @@ export default function TemplateGallery() {
           <div className="flex justify-between h-16 items-center">
             <Link href="/" className="flex items-center">
               <Mail className="h-8 w-8 text-teal-400" />
-              <span className="ml-2 text-xl font-bold text-white">YourName</span>
+              <span className="ml-2 text-xl font-bold text-white">SendBear</span>
             </Link>
             <div className="hidden md:flex items-center space-x-8">
               <Link href="/" className="text-gray-300 hover:text-white transition-colors">

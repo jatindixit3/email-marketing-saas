@@ -66,7 +66,7 @@ export default function VerifyPage() {
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center mb-8">
           <Mail className="h-10 w-10 text-teal-400" />
-          <span className="ml-2 text-2xl font-bold text-white">YourName</span>
+          <span className="ml-2 text-2xl font-bold text-white">SendBear</span>
         </Link>
 
         {/* Card */}

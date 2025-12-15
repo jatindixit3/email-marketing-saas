@@ -5,15 +5,30 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "[YOUR_NAME] - Email Marketing for $9/month",
+  title: "SendBear - Email Marketing That Doesn't Bite",
   description:
-    "Professional email marketing platform that's 10x cheaper than Mailchimp. Send unlimited emails, build your audience, and grow your business.",
+    "Affordable email marketing for small businesses. Send professional campaigns for $9/month instead of $300.",
   keywords: [
     "email marketing",
     "mailchimp alternative",
     "cheap email marketing",
-    "email automation",
+    "bulk email sender",
+    "sendbear",
   ],
+  openGraph: {
+    title: "SendBear - Email Marketing That Doesn't Bite",
+    description: "Send professional campaigns for $9/month instead of $300",
+    url: "https://sendbear.co",
+    siteName: "SendBear",
+    images: ["/og-image.png"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SendBear - Email Marketing That Doesn't Bite",
+    description: "Send professional campaigns for $9/month instead of $300",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
