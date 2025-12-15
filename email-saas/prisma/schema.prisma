@@ -1,0 +1,323 @@
+// Prisma Schema for Email Marketing SaaS
+// PostgreSQL Database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER MODEL
+// ============================================
+model User {
+  id                    String    @id @default(uuid()) @db.Uuid
+  email                 String    @unique @db.VarChar(255)
+  passwordHash          String?   @map("password_hash") @db.VarChar(255)
+  fullName              String?   @map("full_name") @db.VarChar(255)
+  companyName           String?   @map("company_name") @db.VarChar(255)
+
+  // Subscription Information
+  subscriptionTier      String    @default("free") @map("subscription_tier") @db.VarChar(50)
+  subscriptionStatus    String    @default("active") @map("subscription_status") @db.VarChar(50)
+  subscriptionStartedAt DateTime? @map("subscription_started_at") @db.Timestamptz(6)
+  subscriptionEndsAt    DateTime? @map("subscription_ends_at") @db.Timestamptz(6)
+  trialEndsAt           DateTime? @map("trial_ends_at") @db.Timestamptz(6)
+
+  // Usage Limits & Tracking
+  monthlyEmailLimit     Int       @default(1000) @map("monthly_email_limit")
+  monthlyEmailsSent     Int       @default(0) @map("monthly_emails_sent")
+  contactLimit          Int       @default(500) @map("contact_limit")
+
+  // Metadata
+  metadata              Json      @default("{}")
+  settings              Json      @default("{}")
+
+  // Timestamps
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  lastLoginAt           DateTime? @map("last_login_at") @db.Timestamptz(6)
+  deletedAt             DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  lists                 List[]
+  contacts              Contact[]
+  templates             Template[]
+  campaigns             Campaign[]
+
+  @@index([email])
+  @@index([subscriptionTier])
+  @@index([subscriptionStatus])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// ============================================
+// LIST MODEL
+// ============================================
+model List {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name         String    @db.VarChar(255)
+  description  String?   @db.Text
+
+  // Stats
+  contactCount Int       @default(0) @map("contact_count")
+
+  // Metadata
+  metadata     Json      @default("{}")
+
+  // Timestamps
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  listContacts   ListContact[]
+  campaignLists  CampaignList[]
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("lists")
+}
+
+// ============================================
+// CONTACT MODEL
+// ============================================
+model Contact {
+  id                  String    @id @default(uuid()) @db.Uuid
+  userId              String    @map("user_id") @db.Uuid
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  email               String    @db.VarChar(255)
+  firstName           String?   @map("first_name") @db.VarChar(255)
+  lastName            String?   @map("last_name") @db.VarChar(255)
+  phone               String?   @db.VarChar(50)
+  company             String?   @db.VarChar(255)
+
+  // Status
+  status              String    @default("subscribed") @db.VarChar(50)
+  subscriptionSource  String?   @map("subscription_source") @db.VarChar(100)
+
+  // Engagement
+  emailVerified       Boolean   @default(false) @map("email_verified")
+  lastEngagedAt       DateTime? @map("last_engaged_at") @db.Timestamptz(6)
+
+  // Custom Fields
+  customFields        Json      @default("{}") @map("custom_fields")
+  tags                String[]  @default([])
+
+  // Timestamps
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  subscribedAt        DateTime? @default(now()) @map("subscribed_at") @db.Timestamptz(6)
+  unsubscribedAt      DateTime? @map("unsubscribed_at") @db.Timestamptz(6)
+  deletedAt           DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  listContacts        ListContact[]
+  emailEvents         EmailEvent[]
+
+  @@unique([userId, email], name: "unique_contact_email_per_user")
+  @@index([userId])
+  @@index([email])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("contacts")
+}
+
+// ============================================
+// LIST_CONTACT MODEL (Many-to-Many)
+// ============================================
+model ListContact {
+  id        String   @id @default(uuid()) @db.Uuid
+  listId    String   @map("list_id") @db.Uuid
+  contactId String   @map("contact_id") @db.Uuid
+
+  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+  contact   Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([listId, contactId], name: "unique_contact_per_list")
+  @@index([listId])
+  @@index([contactId])
+  @@map("list_contacts")
+}
+
+// ============================================
+// TEMPLATE MODEL
+// ============================================
+model Template {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String?   @map("user_id") @db.Uuid
+  user         User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name         String    @db.VarChar(255)
+  description  String?   @db.Text
+
+  // Template Content
+  subject      String?   @db.VarChar(500)
+  htmlContent  String    @map("html_content") @db.Text
+  textContent  String?   @map("text_content") @db.Text
+
+  // Categorization
+  category     String?   @db.VarChar(100)
+  isPublic     Boolean   @default(false) @map("is_public")
+
+  // Usage Stats
+  usageCount   Int       @default(0) @map("usage_count")
+
+  // Thumbnail
+  thumbnailUrl String?   @map("thumbnail_url") @db.Text
+
+  // Metadata
+  metadata     Json      @default("{}")
+
+  // Timestamps
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  campaigns    Campaign[]
+
+  @@index([userId])
+  @@index([category])
+  @@index([isPublic])
+  @@index([deletedAt])
+  @@map("templates")
+}
+
+// ============================================
+// CAMPAIGN MODEL
+// ============================================
+model Campaign {
+  id                  String    @id @default(uuid()) @db.Uuid
+  userId              String    @map("user_id") @db.Uuid
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  templateId          String?   @map("template_id") @db.Uuid
+  template            Template? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+
+  name                String    @db.VarChar(255)
+  subject             String    @db.VarChar(500)
+  previewText         String?   @map("preview_text") @db.VarChar(255)
+
+  // Content
+  htmlContent         String    @map("html_content") @db.Text
+  textContent         String?   @map("text_content") @db.Text
+
+  // Status & Scheduling
+  status              String    @default("draft") @db.VarChar(50)
+  scheduledAt         DateTime? @map("scheduled_at") @db.Timestamptz(6)
+  sentAt              DateTime? @map("sent_at") @db.Timestamptz(6)
+
+  // Recipients
+  recipientCount      Int       @default(0) @map("recipient_count")
+
+  // Campaign Stats
+  emailsSent          Int       @default(0) @map("emails_sent")
+  emailsDelivered     Int       @default(0) @map("emails_delivered")
+  emailsBounced       Int       @default(0) @map("emails_bounced")
+  emailsOpened        Int       @default(0) @map("emails_opened")
+  emailsClicked       Int       @default(0) @map("emails_clicked")
+  emailsUnsubscribed  Int       @default(0) @map("emails_unsubscribed")
+  emailsComplained    Int       @default(0) @map("emails_complained")
+
+  // Calculated Rates
+  openRate            Decimal   @default(0.00) @map("open_rate") @db.Decimal(5, 2)
+  clickRate           Decimal   @default(0.00) @map("click_rate") @db.Decimal(5, 2)
+  bounceRate          Decimal   @default(0.00) @map("bounce_rate") @db.Decimal(5, 2)
+  unsubscribeRate     Decimal   @default(0.00) @map("unsubscribe_rate") @db.Decimal(5, 2)
+
+  // Settings
+  fromName            String?   @map("from_name") @db.VarChar(255)
+  fromEmail           String?   @map("from_email") @db.VarChar(255)
+  replyToEmail        String?   @map("reply_to_email") @db.VarChar(255)
+
+  // Metadata
+  metadata            Json      @default("{}")
+
+  // Timestamps
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt           DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  campaignLists       CampaignList[]
+  emailEvents         EmailEvent[]
+
+  @@index([userId])
+  @@index([templateId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([sentAt])
+  @@index([deletedAt])
+  @@map("campaigns")
+}
+
+// ============================================
+// CAMPAIGN_LIST MODEL (Many-to-Many)
+// ============================================
+model CampaignList {
+  id         String   @id @default(uuid()) @db.Uuid
+  campaignId String   @map("campaign_id") @db.Uuid
+  listId     String   @map("list_id") @db.Uuid
+
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  list       List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([campaignId, listId], name: "unique_campaign_list")
+  @@index([campaignId])
+  @@index([listId])
+  @@map("campaign_lists")
+}
+
+// ============================================
+// EMAIL_EVENT MODEL
+// ============================================
+model EmailEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  campaignId String   @map("campaign_id") @db.Uuid
+  contactId  String   @map("contact_id") @db.Uuid
+
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  contact    Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  // Event Information
+  eventType  String   @map("event_type") @db.VarChar(50)
+
+  // Event Details
+  userAgent  String?  @map("user_agent") @db.Text
+  ipAddress  String?  @map("ip_address") @db.Inet
+  location   String?  @db.VarChar(255)
+  deviceType String?  @map("device_type") @db.VarChar(50)
+
+  // For clicks
+  linkUrl    String?  @map("link_url") @db.Text
+  linkText   String?  @map("link_text") @db.Text
+
+  // For bounces
+  bounceType   String? @map("bounce_type") @db.VarChar(50)
+  bounceReason String? @map("bounce_reason") @db.Text
+
+  // Metadata
+  metadata   Json     @default("{}")
+
+  // Timestamp
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([campaignId])
+  @@index([contactId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@index([campaignId, contactId])
+  @@map("email_events")
+}
