@@ -16,22 +16,27 @@ import {
   FileText,
 } from "lucide-react";
 
-export default function DashboardPage() {
+interface DashboardPageClientProps {
+  contactCount: number;
+  campaignCount: number;
+}
+
+export function DashboardPageClient({ contactCount, campaignCount }: DashboardPageClientProps) {
   const router = useRouter();
 
-  // Empty state stats
+  // Real stats with actual data
   const stats = [
     {
       title: "Total Contacts",
-      value: "0",
+      value: contactCount.toString(),
       icon: Users,
-      description: "Import your contacts to get started",
+      description: contactCount > 0 ? `${contactCount} contacts in database` : "Import your contacts to get started",
     },
     {
       title: "Campaigns",
-      value: "0",
+      value: campaignCount.toString(),
       icon: Mail,
-      description: "Create your first campaign",
+      description: campaignCount > 0 ? `${campaignCount} total campaigns` : "Create your first campaign",
     },
     {
       title: "Templates",
@@ -77,10 +82,13 @@ export default function DashboardPage() {
       <div className="bg-gradient-to-r from-teal-600 to-teal-700 rounded-lg p-6 mb-6 text-white">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-2xl font-bold mb-2">Welcome to Your Email Marketing Dashboard! 🎉</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              {contactCount > 0 ? `Welcome Back! 👋` : `Welcome to Your Email Marketing Dashboard! 🎉`}
+            </h2>
             <p className="text-teal-100 mb-4 max-w-2xl">
-              Get started by importing your contacts and creating your first email campaign.
-              We'll guide you through every step of building successful email marketing campaigns.
+              {contactCount > 0
+                ? `You have ${contactCount} contacts ready for your next campaign. Let's create something amazing!`
+                : `Get started by importing your contacts and creating your first email campaign. We'll guide you through every step.`}
             </p>
             <div className="flex gap-3">
               <Button
@@ -88,7 +96,7 @@ export default function DashboardPage() {
                 className="bg-white text-teal-700 hover:bg-teal-50"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Import Contacts
+                {contactCount > 0 ? 'Add More Contacts' : 'Import Contacts'}
               </Button>
               <Button
                 onClick={() => router.push("/dashboard/campaigns/create")}
@@ -106,16 +114,17 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
+          const hasData = parseInt(stat.value) > 0;
           return (
             <Card key={stat.title} className="bg-gray-900 border-gray-800">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-gray-400">
                   {stat.title}
                 </CardTitle>
-                <Icon className="h-4 w-4 text-gray-500" />
+                <Icon className={`h-4 w-4 ${hasData ? 'text-teal-500' : 'text-gray-500'}`} />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-white mb-1">
+                <div className={`text-3xl font-bold mb-1 ${hasData ? 'text-teal-400' : 'text-white'}`}>
                   {stat.value}
                 </div>
                 <p className="text-xs text-gray-400">
@@ -176,21 +185,31 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="flex items-start gap-4 p-4 rounded-lg bg-gray-800 border border-gray-700">
-              <div className="h-8 w-8 rounded-full bg-teal-600 flex items-center justify-center flex-shrink-0 text-white font-semibold">
-                1
+            <div className={`flex items-start gap-4 p-4 rounded-lg border ${
+              contactCount > 0
+                ? 'bg-teal-900/20 border-teal-800'
+                : 'bg-gray-800 border-gray-700'
+            }`}>
+              <div className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 text-white font-semibold ${
+                contactCount > 0 ? 'bg-teal-600' : 'bg-teal-600'
+              }`}>
+                {contactCount > 0 ? '✓' : '1'}
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold text-white mb-1">Import Your Contacts</h4>
+                <h4 className="font-semibold text-white mb-1">
+                  {contactCount > 0 ? '✅ Contacts Imported!' : 'Import Your Contacts'}
+                </h4>
                 <p className="text-sm text-gray-400 mb-3">
-                  Upload a CSV file with your contacts or add them manually. Make sure you have permission to email them.
+                  {contactCount > 0
+                    ? `You have ${contactCount} contacts ready to go. You can always import more!`
+                    : 'Upload a CSV file with your contacts or add them manually. Make sure you have permission to email them.'}
                 </p>
                 <Button
-                  onClick={() => router.push("/dashboard/contacts/import")}
+                  onClick={() => router.push(contactCount > 0 ? "/dashboard/contacts" : "/dashboard/contacts/import")}
                   size="sm"
                   className="bg-teal-600 hover:bg-teal-700"
                 >
-                  Import Contacts
+                  {contactCount > 0 ? 'View Contacts' : 'Import Contacts'}
                 </Button>
               </div>
             </div>
@@ -209,8 +228,9 @@ export default function DashboardPage() {
                   size="sm"
                   variant="outline"
                   className="border-gray-700 text-gray-300 hover:bg-gray-700"
+                  disabled={contactCount === 0}
                 >
-                  Create Campaign
+                  {contactCount === 0 ? 'Import Contacts First' : 'Create Campaign'}
                 </Button>
               </div>
             </div>
