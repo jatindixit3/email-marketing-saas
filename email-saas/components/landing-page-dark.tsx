@@ -451,15 +451,6 @@ export default function LandingPageDark() {
                   Start Free Trial
                 </Button>
               </Link>
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-white/20 text-white hover:bg-white/10 text-lg px-8 py-6 backdrop-blur-xl"
-                >
-                  Schedule Demo
-                </Button>
-              </Link>
             </div>
             <p className="mt-6 text-gray-400 text-sm">
               14-day free trial • No credit card required • Migrate in 5 minutes

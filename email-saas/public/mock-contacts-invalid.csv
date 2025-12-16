@@ -1,0 +1,14 @@
+email,first_name,last_name
+valid.email@test.com,Valid,User
+invalid-email-no-at.com,Invalid,User1
+another@valid.email.com,Another,Valid
+not-an-email,Bad,Format
+@missing-local.com,Missing,Local
+missing-domain@,No,Domain
+spaces in@email.com,Has,Spaces
+good.one@example.org,Good,Person
+,,Empty,Fields
+duplicate@test.com,First,Duplicate
+duplicate@test.com,Second,Duplicate
+special!char@test.com,Special,Character
+normal.user@company.com,Normal,User
